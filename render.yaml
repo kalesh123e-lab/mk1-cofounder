@@ -1,0 +1,22 @@
+# Render Blueprint: Render dashboard -> New -> Blueprint -> pick this repo.
+services:
+  - type: web
+    name: mk1-cofounder
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn main:app --workers 1 --threads 8 --timeout 120 --bind 0.0.0.0:$PORT
+    healthCheckPath: /health
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.8
+      - key: ADMIN_PASSWORD      # you choose it; used to open /admin
+        sync: false
+      - key: DATABASE_URL        # Supabase "Session pooler" connection string
+        sync: false
+      - key: UPI_ID              # e.g. yourname@oksbi (can also be set later in /admin)
+        sync: false
+      - key: OWNER_NAME
+        sync: false
+      - key: BRIDGE_TOKEN        # auto-generated; copy it into the Termux bridge command
+        generateValue: true
